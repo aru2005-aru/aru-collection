@@ -1,0 +1,600 @@
+
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARU Collection</title>
+  
+  <!-- Tailwind CSS (Стильдер) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Қаріптер (Fonts) -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    body { font-family: 'Poppins', sans-serif; background-color: #f8f8f8; overflow-x: hidden; }
+    
+    /* Скроллбар әдемілігі */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #f1f1f1; }
+    ::-webkit-scrollbar-thumb { background: #ff9a9e; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #ff6f91; }
+
+    /* Қар жауу анимациясы */
+    .snowflake {
+      position: absolute;
+      top: -10px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.8;
+      pointer-events: none;
+      animation: fall linear infinite;
+    }
+    @keyframes fall {
+      0% { transform: translateY(-10px) rotate(0deg); opacity: 0.8; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0.3; }
+    }
+
+    /* Анимациялар */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translate3d(0, 40px, 0); }
+      to { opacity: 1; transform: translate3d(0, 0, 0); }
+    }
+    .animate-fade-in-up { animation: fadeInUp 0.8s ease-out; }
+    .animate-fade-in { animation: fadeInUp 0.5s ease-out; }
+  </style>
+</head>
+<body class="text-gray-800 relative min-h-screen flex flex-col">
+
+  <!-- SNOW CONTAINER (Тек басты бетте көрінеді) -->
+  <div id="snow-container" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0"></div>
+
+  <!-- HEADER -->
+  <header class="bg-gradient-to-r from-[#ff9a9e] to-[#fad0c4] text-white p-4 sticky top-0 z-40 shadow-md">
+    <div class="max-w-7xl mx-auto flex justify-between items-center relative">
+      <!-- Сол жақ: Бос орын немесе Лого -->
+      <div class="w-8 hidden md:block"></div>
+
+      <!-- Ортасы: Атауы -->
+      <h1 class="text-2xl md:text-3xl font-bold tracking-widest uppercase cursor-pointer absolute left-1/2 transform -translate-x-1/2" onclick="switchTab('home')">
+        ARU Collection
+      </h1>
+
+      <!-- Оң жақ: Профиль және Себет -->
+      <div class="flex items-center space-x-4 ml-auto">
+        
+        <!-- User Profile Section -->
+        <div onclick="handleUserClick()" class="flex items-center space-x-2 cursor-pointer bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-full transition select-none">
+          <div class="text-right hidden sm:block leading-tight">
+            <div id="header-username" class="font-bold text-sm">Қонақ</div>
+            <div id="header-phone" class="text-xs opacity-80">Тіркелу</div>
+          </div>
+          <div class="w-8 h-8 bg-white text-[#ff9a9e] rounded-full flex items-center justify-center font-bold shadow-sm">
+            👤
+          </div>
+        </div>
+
+        <!-- Cart Button -->
+        <button onclick="toggleCart(true)" class="bg-[#ff6f91] hover:bg-[#ff5c82] text-white p-2 md:px-3 rounded-full transition shadow-lg relative">
+          <span class="text-xl">❤️</span>
+          <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full border border-white hidden">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVIGATION -->
+  <nav class="bg-[#ff6f91] shadow-md z-30 sticky top-[64px]">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-center">
+      <button onclick="switchTab('home')" class="nav-btn py-3 px-6 text-white font-medium transition hover:bg-[#ff8fa9] md:border-r border-[#ff9a9e] bg-[#e0567a]" data-tab="home">Басты бет</button>
+      <button onclick="switchTab('products')" class="nav-btn py-3 px-6 text-white font-medium transition hover:bg-[#ff8fa9] md:border-r border-[#ff9a9e]" data-tab="products">Қызметтер</button>
+      <button onclick="switchTab('contact')" class="nav-btn py-3 px-6 text-white font-medium transition hover:bg-[#ff8fa9]" data-tab="contact">Байланыс</button>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="flex-grow p-6 max-w-7xl mx-auto w-full relative z-10">
+
+    <!-- HOME PAGE -->
+    <div id="home-page" class="animate-fade-in-up flex flex-col items-center justify-center min-h-[60vh] text-center space-y-6">
+      <div class="relative">
+        <div class="absolute inset-0 bg-[#ff9a9e] rounded-full blur-xl opacity-50"></div>
+        <!-- НЕГІЗГІ СУРЕТ: Файлды 'aruzhan.jpg' деп сақтаңыз -->
+        <img src="https://i.pinimg.com/736x/36/98/50/369850281a460ef8f3f700d84b18516b.jpg" alt="Profile" class="w-64 h-80 md:w-80 md:h-96 object-cover rounded-2xl border-4 border-white shadow-xl relative z-10" onerror="this.src='https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=400'">
+      </div>
+      <h1 class="text-4xl md:text-6xl font-bold text-gray-800">ARU COLLECTION</h1>
+      <p class="text-2xl md:text-3xl font-semibold text-[#ff6f91] animate-pulse drop-shadow-md">
+        Сіздің стильіңізді толықтырамыз 💎
+      </p>
+      <button onclick="switchTab('products')" class="mt-8 px-8 py-3 bg-[#ff6f91] text-white rounded-full font-bold shadow-lg hover:scale-105 transition transform">
+        Коллекцияны көру
+      </button>
+    </div>
+
+    <!-- PRODUCTS PAGE -->
+    <div id="products-page" class="hidden animate-fade-in">
+      <h2 class="text-3xl font-bold text-center mb-8 text-gray-700">Аксессуарлар Коллекциясы</h2>
+      
+      <!-- Category Filter -->
+      <div class="flex flex-wrap justify-center gap-3 mb-10" id="category-filters">
+        <button onclick="filterCategory('сақина')" class="cat-btn px-5 py-2 rounded-full font-semibold transition shadow-sm bg-[#ff6f91] text-white ring-2 ring-[#ff9a9e] ring-offset-2" data-cat="сақина">Сақиналар</button>
+        <button onclick="filterCategory('білезік')" class="cat-btn px-5 py-2 rounded-full font-semibold transition shadow-sm bg-white text-gray-600 hover:bg-gray-100" data-cat="білезік">Білезіктер</button>
+        <button onclick="filterCategory('сағат')" class="cat-btn px-5 py-2 rounded-full font-semibold transition shadow-sm bg-white text-gray-600 hover:bg-gray-100" data-cat="сағат">Сағаттар</button>
+        <button onclick="filterCategory('сөмке')" class="cat-btn px-5 py-2 rounded-full font-semibold transition shadow-sm bg-white text-gray-600 hover:bg-gray-100" data-cat="сөмке">Сөмкелер</button>
+      </div>
+
+      <!-- Products Grid -->
+      <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- JS арқылы толтырылады -->
+      </div>
+    </div>
+
+    <!-- CONTACT PAGE -->
+    <div id="contact-page" class="hidden animate-fade-in mt-10">
+      <div class="max-w-2xl mx-auto bg-white p-10 rounded-2xl shadow-xl text-center">
+        <h2 class="text-3xl font-bold mb-6 text-[#ff6f91]">Байланыс</h2>
+        <div class="space-y-4 text-lg">
+          <p>Біздің мекен-жайымыз: <br/><span class="font-semibold">Астана қаласы, Хан-Шатыр 3-этаж</span></p>
+          <p>Телефон: <br/><a href="tel:+77066829722" class="text-2xl font-bold text-gray-800 hover:text-[#ff6f91] transition">+7 706 682 97 22</a></p>
+          <p>Instagram: <br/><span class="font-semibold text-[#ff6f91]">@aru_collection</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMIN PAGE -->
+    <div id="admin-page" class="hidden animate-fade-in">
+      <div class="flex justify-between items-center mb-8">
+        <h2 class="text-3xl font-bold text-gray-800">📦 Тапсырыстар Тарихы (Admin)</h2>
+        <button onclick="clearHistory()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition">Тарихты тазалау</button>
+      </div>
+      <div id="admin-content" class="bg-white rounded-xl shadow-lg overflow-hidden overflow-x-auto">
+        <!-- Table goes here -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-800 text-gray-300 py-6 text-center mt-auto">
+    <p>&copy; 2025 ARU Collection | Сіздің стиліңізді толықтырамыз 💎</p>
+    <button onclick="switchTab('admin')" class="mt-2 text-xs text-gray-600 hover:text-white transition">Admin Login</button>
+  </footer>
+
+  <!-- REGISTER MODAL -->
+  <div id="register-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-[#ffb6c1] bg-opacity-95 backdrop-blur-sm hidden">
+    <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-sm text-center transform transition-all scale-100">
+      <h2 class="text-2xl font-bold mb-6 text-gray-800">Тіркелу</h2>
+      <p class="mb-4 text-gray-500 text-sm">Дүкенге кіру үшін атыңыз бен телефон нөміріңізді енгізіңіз.</p>
+      <div class="space-y-4">
+        <input type="text" id="reg-name" placeholder="Атыңыз (Мысалы: Аружан)" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6f91] focus:outline-none">
+        <input type="tel" id="reg-phone" placeholder="Телефон (Мысалы: 87071234567)" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#ff6f91] focus:outline-none">
+        <p id="reg-error" class="text-red-500 text-sm font-medium hidden"></p>
+        <button onclick="handleRegister()" class="w-full bg-[#ff6f91] text-white py-3 rounded-full font-bold text-lg hover:shadow-lg hover:bg-[#ff5c82] transition transform hover:-translate-y-1">Кіру</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE INFO MODAL -->
+  <div id="profile-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm hidden">
+    <div class="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-xs text-center relative">
+      <button onclick="document.getElementById('profile-modal').classList.add('hidden')" class="absolute top-2 right-3 text-gray-500 hover:text-gray-800 text-xl">&times;</button>
+      <div class="w-20 h-20 bg-[#ff9a9e] rounded-full mx-auto flex items-center justify-center text-4xl mb-4 text-white">
+        👤
+      </div>
+      <h2 id="profile-name-display" class="text-xl font-bold text-gray-800">Аты</h2>
+      <p id="profile-phone-display" class="text-gray-500 mb-6">Телефон</p>
+      
+      <button onclick="logout()" class="w-full bg-gray-200 text-gray-700 py-2 rounded-lg font-medium hover:bg-red-100 hover:text-red-600 transition">
+        Аккаунттан шығу
+      </button>
+    </div>
+  </div>
+
+  <!-- CART MODAL -->
+  <div id="cart-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm transition-opacity hidden">
+    <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden transform transition-all m-4">
+      <div class="bg-gradient-to-r from-[#ff9a9e] to-[#fad0c4] p-4 flex justify-between items-center text-white">
+        <h2 class="text-xl font-bold">🛒 Сіздің Себетіңіз</h2>
+        <button onclick="toggleCart(false)" class="text-2xl hover:text-red-100">&times;</button>
+      </div>
+      <div id="cart-items" class="p-6 max-h-[60vh] overflow-y-auto space-y-4">
+        <!-- Cart Items JS -->
+      </div>
+      <div class="p-4 border-t bg-gray-50">
+        <div class="flex justify-between items-center mb-4 text-lg font-bold">
+          <span>Жалпы сома:</span>
+          <span class="text-[#ff6f91]" id="cart-total">₸0</span>
+        </div>
+        <button onclick="checkout()" class="w-full py-3 rounded-lg text-white font-bold transition transform active:scale-95 bg-[#ff9a9e] hover:bg-[#ff6f91] shadow-lg">
+          Тапсырыс беру
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- ДЕРЕКТЕР (DATA) ---
+    // ЖАҢАРТЫЛҒАН СУРЕТТЕР ТІЗІМІ
+    const PRODUCTS = [
+      // САҚИНАЛАР
+      {id:1,name:"Алтын сақина 'Көңіл'",price:65000,category:"сақина",image:"https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400"},
+      {id:2,name:"Күміс сақина 'Жұлдыз'",price:12500,category:"сақина",image:"https://images.satu.kz/233928225_w700_h500_kazahskoe-natsionalnoe-koltso.jpg"},
+      {id:3,name:"Гауһар тасты сақина 'Сұлу'",price:45000,category:"сақина",image:"https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=400"},
+      {id:5,name:"Күміс сақина 'Таң'",price:13500,category:"сақина",image:"https://orda.kz/uploads/posts/2025-04/kazakh_ornament.jpg"},
+      
+      
+      // БІЛЕЗІКТЕР
+      {id:7,name:"Былғары білезік 'Батыр'",price:8000,category:"білезік",image:"https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=400"}, 
+      {id:8,name:"Металл білезік 'Жарық'",price:10000,category:"білезік",image:"https://el.kz/upload/storage_el/media/images/tiny_images/b1e63d07201915fe6d062ddaca8cad13.jpg"},
+      {id:10,name:"Алтын білезік 'Салт'",price:95000,category:"білезік",image:"https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400"},
+      {id:11,name:"Бисер білезік 'Жібек'",price:7500,category:"білезік",image:"https://i.ytimg.com/vi/bSnaehTbk18/maxresdefault.jpg"},
+      
+      // САҒАТТАР
+      {id:13,name:"Смарт сағат 'Elegance'",price:65000,category:"сағат",image:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400"},
+      {id:14,name:"Механикалық сағат 'Уақыт'",price:55000,category:"сағат",image:"https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=400"},
+      {id:15,name:"Спорттық сағат 'Жауһар'",price:45000,category:"сағат",image:"https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=400"},
+      {id:16,name:"Классикалық сағат 'Дәстүр'",price:50000,category:"сағат",image:"https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?w=400"},
+      {id:17,name:"Күміс сағат 'Ай'",price:60000,category:"сағат",image:"https://images.unsplash.com/photo-1533139502658-0198f920d8e8?w=400"},
+      {id:18,name:"Алтын сағат 'Жұлдыз'",price:75000,category:"сағат",image:"https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=400"},
+      
+      // СӨМКЕЛЕР
+      {id:19,name:"Кіші сөмке 'Жарық'",price:25000,category:"сөмке",image:"https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400"},
+      {id:20,name:"Ірі сөмке 'Салтанат'",price:40000,category:"сөмке",image:"https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=400"},
+      {id:21,name:"Кроссбоди сөмке",price:30000,category:"сөмке",image:"https://avatars.mds.yandex.net/get-mpic/16354551/2a00000198670c2034875b0758fa5d0e792d/orig"},
+      {id:22,name:"Клатч 'Сұлулық'",price:20000,category:"сөмке",image:"https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=400"},
+      {id:23,name:"Былғары сөмке ",price:35000,category:"сөмке",image:"https://static.zara.net/assets/public/0e85/c7b8/3b214669a6ca/2950a5865bd4/13347620002-ult30/13347620002-ult30.jpg?ts=1753357310172&w=375"},
+    ];
+
+    // --- STATE ---
+    let cart = [];
+    let currentUser = null;
+    let currentCategory = 'сақина';
+
+    // --- INITIALIZATION ---
+    window.onload = function() {
+      // Check User
+      const storedUser = localStorage.getItem('aruUser');
+      if (storedUser) {
+        currentUser = JSON.parse(storedUser);
+      } else {
+        document.getElementById('register-modal').classList.remove('hidden');
+      }
+      
+      updateUserDisplay(); // Жаңа функция: Header-де атын көрсету
+
+      // Start Snow
+      createSnow();
+      
+      // Render Initial Products
+      renderProducts();
+    };
+
+    // --- USER MANAGEMENT ---
+    function updateUserDisplay() {
+      const nameEl = document.getElementById('header-username');
+      const phoneEl = document.getElementById('header-phone');
+      
+      if (currentUser) {
+        nameEl.textContent = currentUser.name;
+        phoneEl.textContent = currentUser.phone;
+      } else {
+        nameEl.textContent = "Қонақ";
+        phoneEl.textContent = "Тіркелу";
+      }
+    }
+
+    function handleUserClick() {
+      if (currentUser) {
+        // Show Profile Modal
+        document.getElementById('profile-name-display').textContent = currentUser.name;
+        document.getElementById('profile-phone-display').textContent = currentUser.phone;
+        document.getElementById('profile-modal').classList.remove('hidden');
+      } else {
+        // Show Register Modal
+        document.getElementById('register-modal').classList.remove('hidden');
+      }
+    }
+
+    function logout() {
+      if(!confirm("Аккаунттан шыққыңыз келе ме?")) return;
+
+      // 1. Clear Storage
+      localStorage.removeItem('aruUser');
+      currentUser = null;
+      
+      // 2. Clear Cart (optional)
+      cart = [];
+      updateCartUI();
+
+      // 3. Close Profile Modal
+      document.getElementById('profile-modal').classList.add('hidden');
+      
+      // 4. Update Header
+      updateUserDisplay();
+      
+      // 5. Open Register Modal Immediately
+      document.getElementById('register-modal').classList.remove('hidden');
+      
+      // 6. Go to Home tab
+      switchTab('home');
+    }
+
+    // --- SNOW EFFECT ---
+    function createSnow() {
+      const container = document.getElementById('snow-container');
+      const flakeCount = 50;
+      for (let i = 0; i < flakeCount; i++) {
+        const flake = document.createElement('div');
+        flake.classList.add('snowflake');
+        const size = Math.random() * 5 + 3;
+        flake.style.width = `${size}px`;
+        flake.style.height = `${size}px`;
+        flake.style.left = `${Math.random() * 100}%`;
+        flake.style.animationDuration = `${Math.random() * 5 + 5}s`;
+        flake.style.animationDelay = `-${Math.random() * 5}s`;
+        container.appendChild(flake);
+      }
+    }
+
+    // --- NAVIGATION ---
+    function switchTab(tabId) {
+      // Hide all pages
+      ['home-page', 'products-page', 'contact-page', 'admin-page'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+      });
+      // Show selected
+      document.getElementById(`${tabId}-page`).classList.remove('hidden');
+
+      // Update Nav Buttons
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        if(btn.dataset.tab === tabId) {
+          btn.classList.add('bg-[#e0567a]');
+        } else {
+          btn.classList.remove('bg-[#e0567a]');
+        }
+      });
+
+      // Toggle Snow (Only on Home)
+      document.getElementById('snow-container').style.display = tabId === 'home' ? 'block' : 'none';
+
+      // Load Admin Data if Admin tab
+      if (tabId === 'admin') renderAdminPanel();
+    }
+
+    // --- REGISTER ---
+    function handleRegister() {
+      const name = document.getElementById('reg-name').value;
+      const phone = document.getElementById('reg-phone').value;
+      const errorEl = document.getElementById('reg-error');
+
+      if (name.length < 2) {
+        errorEl.innerText = "Атыңыз кемінде 2 әріп болуы керек";
+        errorEl.classList.remove('hidden');
+        return;
+      }
+      // Simple validation
+      if (phone.length < 10) {
+        errorEl.innerText = "Телефон нөмірі дұрыс емес";
+        errorEl.classList.remove('hidden');
+        return;
+      }
+
+      currentUser = { name, phone };
+      localStorage.setItem('aruUser', JSON.stringify(currentUser));
+      document.getElementById('register-modal').classList.add('hidden');
+      
+      // Update UI immediately
+      updateUserDisplay();
+      alert(`Қош келдіңіз, ${name}!`);
+    }
+
+    // --- PRODUCTS ---
+    function filterCategory(cat) {
+      currentCategory = cat;
+      // Update buttons
+      document.querySelectorAll('.cat-btn').forEach(btn => {
+        if(btn.dataset.cat === cat) {
+          btn.classList.remove('bg-white', 'text-gray-600');
+          btn.classList.add('bg-[#ff6f91]', 'text-white', 'ring-2', 'ring-[#ff9a9e]', 'ring-offset-2');
+        } else {
+          btn.classList.add('bg-white', 'text-gray-600');
+          btn.classList.remove('bg-[#ff6f91]', 'text-white', 'ring-2', 'ring-[#ff9a9e]', 'ring-offset-2');
+        }
+      });
+      renderProducts();
+    }
+
+    function renderProducts() {
+      const grid = document.getElementById('products-grid');
+      grid.innerHTML = '';
+      const filtered = PRODUCTS.filter(p => p.category === currentCategory);
+      
+      filtered.forEach(p => {
+        const card = `
+          <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition duration-300 transform hover:-translate-y-1">
+            <div class="h-64 overflow-hidden relative group">
+              <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover transition duration-500 group-hover:scale-110" onerror="this.src='https://via.placeholder.com/300'">
+              <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition duration-300"></div>
+            </div>
+            <div class="p-5 text-center">
+              <h3 class="text-lg font-bold text-gray-800 mb-2 truncate">${p.name}</h3>
+              <p class="text-[#ff6f91] font-bold text-xl mb-4">₸${p.price.toLocaleString('kk-KZ')}</p>
+              <button onclick="addToCart(${p.id})" class="w-full bg-gray-800 text-white py-2 rounded-lg font-medium hover:bg-[#ff6f91] transition-colors">
+                Себетке қосу
+              </button>
+            </div>
+          </div>
+        `;
+        grid.innerHTML += card;
+      });
+    }
+
+    // --- CART ---
+    function addToCart(id) {
+      const product = PRODUCTS.find(p => p.id === id);
+      const existing = cart.find(item => item.id === id);
+      if (existing) {
+        existing.quantity++;
+      } else {
+        cart.push({ ...product, quantity: 1 });
+      }
+      updateCartUI();
+      alert(`${product.name} себетке қосылды!`);
+    }
+
+    function removeFromCart(id) {
+      cart = cart.filter(item => item.id !== id);
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      const badge = document.getElementById('cart-badge');
+      const totalItems = cart.reduce((sum, i) => sum + i.quantity, 0);
+      
+      if (totalItems > 0) {
+        badge.innerText = totalItems;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+
+      // Render Modal List
+      const list = document.getElementById('cart-items');
+      list.innerHTML = '';
+      let totalAmount = 0;
+
+      if (cart.length === 0) {
+        list.innerHTML = '<p class="text-center text-gray-500 py-4">Себет бос.</p>';
+      } else {
+        cart.forEach(item => {
+          totalAmount += item.price * item.quantity;
+          list.innerHTML += `
+            <div class="flex justify-between items-center border-b pb-2">
+              <div class="flex items-center space-x-3">
+                <img src="${item.image}" class="w-12 h-12 rounded object-cover" onerror="this.src='https://via.placeholder.com/50'">
+                <div>
+                  <p class="font-semibold text-sm">${item.name}</p>
+                  <p class="text-xs text-gray-500">${item.quantity} x ₸${item.price.toLocaleString()}</p>
+                </div>
+              </div>
+              <div class="flex items-center space-x-2">
+                <span class="font-bold text-[#ff6f91]">₸${(item.price * item.quantity).toLocaleString()}</span>
+                <button onclick="removeFromCart(${item.id})" class="text-red-500 hover:text-red-700 font-bold px-2">X</button>
+              </div>
+            </div>
+          `;
+        });
+      }
+      
+      document.getElementById('cart-total').innerText = `₸${totalAmount.toLocaleString('kk-KZ')}`;
+    }
+
+    function toggleCart(show) {
+      const modal = document.getElementById('cart-modal');
+      if (show) modal.classList.remove('hidden');
+      else modal.classList.add('hidden');
+    }
+
+    // --- CHECKOUT & ADMIN ---
+    function checkout() {
+      if (cart.length === 0) return alert("Себет бос!");
+      if (!currentUser) {
+        toggleCart(false);
+        document.getElementById('register-modal').classList.remove('hidden');
+        return;
+      }
+
+      const totalAmount = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+      // 1. Create Order
+      const newOrder = {
+        id: Date.now(),
+        user: currentUser,
+        items: [...cart],
+        totalAmount: totalAmount,
+        date: new Date().toISOString(),
+        status: 'new'
+      };
+
+      // 2. Save to LocalStorage (Admin Panel)
+      const existingHistory = JSON.parse(localStorage.getItem('aru_orders_history') || '[]');
+      existingHistory.unshift(newOrder); // Add to top
+      localStorage.setItem('aru_orders_history', JSON.stringify(existingHistory));
+
+      // 3. WhatsApp Redirect
+      const phoneNumber = "77066829722"; // 8706... -> 7706... format
+      let message = `👋 Сәлеметсіз бе! ARU Collection-нан тапсырыс бергім келеді.\n\n`;
+      message += `👤 Клиент: ${currentUser.name}\n`;
+      message += `📱 Телефон: ${currentUser.phone}\n\n`;
+      message += `🛒 Тапсырыс тізімі:\n`;
+      
+      cart.forEach((item) => {
+        message += `▪️ ${item.name} (x${item.quantity}) - ${(item.price * item.quantity).toLocaleString('kk-KZ')} ₸\n`;
+      });
+
+      message += `\n💰 Жалпы сома: ${totalAmount.toLocaleString('kk-KZ')} ₸`;
+      message += `\n📅 Уақыты: ${new Date().toLocaleString('kk-KZ')}`;
+
+      const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+      
+      // 4. Reset
+      cart = [];
+      updateCartUI();
+      toggleCart(false);
+      
+      window.open(url, '_blank');
+    }
+
+    // --- ADMIN PANEL RENDER ---
+    function renderAdminPanel() {
+      const container = document.getElementById('admin-content');
+      const orders = JSON.parse(localStorage.getItem('aru_orders_history') || '[]');
+
+      if (orders.length === 0) {
+        container.innerHTML = '<div class="p-10 text-center text-gray-500 text-xl">Әзірге тапсырыстар жоқ.</div>';
+        return;
+      }
+
+      let html = `
+        <table class="w-full text-left border-collapse min-w-[600px]">
+          <thead>
+            <tr class="bg-[#ff9a9e] text-white uppercase text-sm leading-normal">
+              <th class="py-3 px-6">Уақыты</th>
+              <th class="py-3 px-6">Клиент</th>
+              <th class="py-3 px-6">Телефон</th>
+              <th class="py-3 px-6">Тауарлар</th>
+              <th class="py-3 px-6 text-right">Сомасы</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-600 text-sm font-light">
+      `;
+
+      orders.forEach(order => {
+        const dateStr = new Date(order.date).toLocaleString('kk-KZ');
+        const itemsList = order.items.map(i => `<li>${i.name} <span class="text-gray-400">x${i.quantity}</span></li>`).join('');
+        
+        html += `
+          <tr class="border-b border-gray-200 hover:bg-gray-50 transition">
+            <td class="py-3 px-6 whitespace-nowrap">${dateStr}</td>
+            <td class="py-3 px-6 font-medium">${order.user.name}</td>
+            <td class="py-3 px-6">${order.user.phone}</td>
+            <td class="py-3 px-6"><ul class="list-disc list-inside">${itemsList}</ul></td>
+            <td class="py-3 px-6 text-right font-bold text-[#ff6f91]">₸${order.totalAmount.toLocaleString('kk-KZ')}</td>
+          </tr>
+        `;
+      });
+
+      html += '</tbody></table>';
+      container.innerHTML = html;
+    }
+
+    function clearHistory() {
+      if(confirm("Сіз барлық тарихты өшіргіңіз келе ме?")) {
+        localStorage.removeItem('aru_orders_history');
+        renderAdminPanel();
+      }
+    }
+  </script>
+</body>
+</html>
